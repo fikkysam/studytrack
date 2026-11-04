@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTrack | Assignment Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>StudyTrack</h1>
+        <p>Keep track of your assignments and deadlines.</p>
+    </header>
+
+    <main>
+        <section class="summary">
+            <div class="summary-card">
+                <h3>Total</h3>
+                <p id="totalCount">0</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Pending</h3>
+                <p id="pendingCount">0</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Completed</h3>
+                <p id="completedCount">0</p>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2>Add an Assignment</h2>
+
+            <form id="assignmentForm">
+                <label for="title">Assignment title</label>
+                <input type="text" id="title" required>
+
+                <label for="course">Course</label>
+                <input type="text" id="course" required>
+
+                <label for="dueDate">Due date</label>
+                <input type="date" id="dueDate" required>
+
+                <label for="priority">Priority</label>
+                <select id="priority" required>
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <button type="submit">Add Assignment</button>
+            </form>
+        </section>
+
+        <section class="assignment-section">
+            <h2>My Assignments</h2>
+            <div id="assignmentList"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
