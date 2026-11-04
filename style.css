@@ -1,0 +1,180 @@
+/* StudyTrack — Sprint 1 Styles */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: #4b287d;
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+header h1 {
+    margin: 0 0 10px;
+    font-size: 2rem;
+}
+
+header p {
+    margin: 0;
+}
+
+/* Main layout */
+main {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Summary cards */
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px #ddd;
+}
+
+.summary-card h3 {
+    margin: 0;
+    color: #555;
+}
+
+.summary-card p {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px 0 0;
+}
+
+/* Form and assignment sections */
+.form-section,
+.assignment-section {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px #ddd;
+}
+
+h2 {
+    margin-top: 0;
+    color: #4b287d;
+}
+
+/* Assignment form */
+form {
+    display: grid;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+select,
+button {
+    width: 100%;
+    padding: 11px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid #4b287d;
+    border-color: #4b287d;
+}
+
+button {
+    background: #4b287d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+button:hover {
+    background: #351b5b;
+}
+
+/* Assignment cards */
+.assignment-card {
+    border: 1px solid #ddd;
+    border-left: 5px solid #4b287d;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+
+.assignment-card h3 {
+    margin-top: 0;
+}
+
+.assignment-card.completed {
+    opacity: 0.7;
+    border-left-color: #26834a;
+}
+
+.assignment-card.completed h3 {
+    text-decoration: line-through;
+}
+
+/* Assignment action buttons */
+.assignment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.assignment-actions button {
+    font-size: 14px;
+}
+
+.delete-button {
+    background: #b42318;
+}
+
+.delete-button:hover {
+    background: #821b13;
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+    main {
+        margin: 20px auto;
+        padding: 0 12px;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .form-section,
+    .assignment-section {
+        padding: 18px;
+    }
+
+    .assignment-actions {
+        flex-direction: column;
+    }
+}
