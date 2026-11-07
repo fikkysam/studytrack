@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTrack | Assignment Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>StudyTrack</h1>
+        <p>Keep track of your assignments and deadlines.</p>
+    </header>
+
+    <main>
+        <section class="summary">
+            <div class="summary-card">
+                <h3>Total</h3>
+                <p id="totalCount">0</p>
+            </div>
+            <div class="summary-card">
+                <h3>Pending</h3>
+                <p id="pendingCount">0</p>
+            </div>
+            <div class="summary-card">
+                <h3>Upcoming</h3>
+                <p id="upcomingCount">0</p>
+            </div>
+            <div class="summary-card">
+                <h3>Completed</h3>
+                <p id="completedCount">0</p>
+            </div>
+            <div class="summary-card">
+                <h3>Overdue</h3>
+                <p id="overdueCount">0</p>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2>Add an Assignment</h2>
+            <form id="assignmentForm">
+                <label for="title">Assignment title</label>
+                <input type="text" id="title" required>
+
+                <label for="course">Course</label>
+                <input type="text" id="course" required>
+
+                <label for="dueDate">Due date</label>
+                <input type="date" id="dueDate" required>
+
+                <label for="priority">Priority</label>
+                <select id="priority" required>
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <button type="submit">Add Assignment</button>
+            </form>
+        </section>
+
+        <section class="assignment-section">
+            <h2>My Assignments</h2>
+
+            <div class="controls">
+                <input type="search" id="searchInput"
+                    placeholder="Search by assignment or course..."
+                    aria-label="Search assignments">
+
+                <select id="statusFilter" aria-label="Filter by status">
+                    <option value="all">All assignments</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+
+                <select id="sortSelect" aria-label="Sort assignments">
+                    <option value="due-asc">Due date: Earliest first</option>
+                    <option value="due-desc">Due date: Latest first</option>
+                    <option value="priority">Priority: High to Low</option>
+                </select>
+
+                <button type="button" id="clearFilters">Clear Filters</button>
+            </div>
+
+            <p id="resultsCount" aria-live="polite">0 assignments</p>
+            <div id="assignmentList"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>StudyTrack – Student Assignment and Deadline Tracker</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
