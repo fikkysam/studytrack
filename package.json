@@ -1,0 +1,25 @@
+{
+  "name": "studytrack",
+  "version": "1.0.0",
+  "description": "StudyTrack is a browser-based application designed to help students manage assignments, priorities, and deadlines in one place.",
+  "main": "script.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fikkysam/studytrack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fikkysam/studytrack/issues"
+  },
+  "homepage": "https://github.com/fikkysam/studytrack#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.65.0"
+  }
+}

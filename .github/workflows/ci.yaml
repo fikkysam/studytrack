@@ -10,8 +10,8 @@ on:
       - main
 
 jobs:
-  validate:
-    name: Validate StudyTrack
+  validate-and-test:
+    name: Validate and Test StudyTrack
     runs-on: ubuntu-latest
 
     steps:
@@ -21,10 +21,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Check JavaScript syntax
         run: node --check script.js
 
       - name: Validate HTML
         run: npx --yes html-validate index.html
+
+      - name: Run automated browser tests
+        run: npm test
