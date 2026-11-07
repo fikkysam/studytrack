@@ -10,8 +10,8 @@ on:
       - main
 
 jobs:
-  validate-and-test:
-    name: Validate and Test StudyTrack
+  quality-checks:
+    name: StudyTrack Quality Checks
     runs-on: ubuntu-latest
 
     steps:
@@ -30,11 +30,5 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Check JavaScript syntax
-        run: node --check script.js
-
-      - name: Validate HTML
-        run: npx --yes html-validate index.html
-
-      - name: Run automated browser tests
-        run: npm test
+      - name: Run HTML validation, ESLint and Playwright
+        run: npm run check
