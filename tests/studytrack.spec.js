@@ -160,13 +160,12 @@ test("should preserve assignments after refreshing", async ({ page }) => {
  * freely; the test does not rely on a fixed list of real course names.
  */
 test("should add and persist each course in the dynamic test data", async ({ page }) => {
-    const coursesToVerify = [
-        "Cloud Computing",
-        "Blockchain Security",
-        "AWS",
-        "Solidity Programming",
-        "Microsoft Entra ID"
-    ];
+    // Supply any comma-separated course names through STUDYTRACK_COURSES.
+    // When no input is provided (for normal push/PR runs), use sample courses.
+    const suppliedCourses = process.env.STUDYTRACK_COURSES || "";
+    const coursesToVerify = suppliedCourses.trim()
+        ? suppliedCourses.split(",").map(name => name.trim()).filter(Boolean)
+        : ["Cloud Computing", "Blockchain Security"];
 
     for (const [index, courseName] of coursesToVerify.entries()) {
         const assignmentTitle = `Course verification ${index + 1}`;
