@@ -154,21 +154,27 @@ test("should preserve assignments after refreshing", async ({ page }) => {
 });
 
 
-/*
- * Dynamic course verification.
- * The course names below are test data for this run. Replace/add entries
- * freely; the test does not rely on a fixed list of real course names.
- */
-test("should add and persist each course in the dynamic test data", async ({ page }) => {
-    // Supply any comma-separated course names through STUDYTRACK_COURSES.
-    // When no input is provided (for normal push/PR runs), use sample courses.
-    const suppliedCourses = process.env.STUDYTRACK_COURSES || "";
-    const coursesToVerify = suppliedCourses.trim()
-        ? suppliedCourses.split(",").map(name => name.trim()).filter(Boolean)
-        : ["Cloud Computing", "Blockchain Security"];
 
-    for (const [index, courseName] of coursesToVerify.entries()) {
-        const assignmentTitle = `Course verification ${index + 1}`;
+/*
+ * Each course becomes its own Playwright test, so the HTML report shows
+ * a separate PASS/FAIL result for every course supplied to the workflow.
+ *
+ * To test other courses, run the workflow manually and enter a comma-separated
+ * list in the "courses" input. If no input is supplied, sample courses are used.
+ */
+const suppliedCourses = process.env.STUDYTRACK_COURSES || "";
+const coursesToVerify = [...new Set(
+    (suppliedCourses.trim()
+        ? suppliedCourses.split(",")
+        : ["Cloud Computing", "Blockchain Security"]
+    )
+        .map(name => name.trim())
+        .filter(Boolean)
+)];
+
+for (const courseName of coursesToVerify) {
+    test(`should add and persist course: ${courseName}`, async ({ page }) => {
+        const assignmentTitle = `Course verification - ${courseName}`;
 
         await addAssignment(
             page,
@@ -184,11 +190,9 @@ test("should add and persist each course in the dynamic test data", async ({ pag
             })
         });
 
-        // Confirm the new assignment and its course are shown in the UI.
         await expect(card).toBeVisible();
         await expect(card).toContainText(courseName);
 
-        // Confirm the assignment (including its course name) was saved.
         const stored = await page.evaluate(() =>
             JSON.parse(localStorage.getItem("studyTrackAssignments") || "[]")
         );
@@ -197,7 +201,6 @@ test("should add and persist each course in the dynamic test data", async ({ pag
             item.title === assignmentTitle && item.course === courseName
         )).toBeTruthy();
 
-        // Confirm the saved course remains visible after a browser refresh.
         await page.reload();
 
         const persistedCard = page.locator(".assignment-card").filter({
@@ -209,7 +212,5 @@ test("should add and persist each course in the dynamic test data", async ({ pag
 
         await expect(persistedCard).toBeVisible();
         await expect(persistedCard).toContainText(courseName);
-
-        console.log(`COURSE_REPORT: PASS | ${courseName}`);
-    }
-});
+    });
+}
