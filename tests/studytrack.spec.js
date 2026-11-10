@@ -152,3 +152,99 @@ test("should preserve assignments after refreshing", async ({ page }) => {
         page.locator(".assignment-card")
     ).toContainText("Persistent Assignment");
 });
+
+
+
+/*
+ * Each course becomes its own Playwright test, so the HTML report shows
+ * a separate PASS/FAIL result for every course supplied to the workflow.
+ *
+ * To test other courses, run the workflow manually and enter a comma-separated
+ * list in the "courses" input. If no input is supplied, sample courses are used.
+ */
+const suppliedCourses = process.env.STUDYTRACK_COURSES || "";
+const coursesToVerify = [...new Set(
+    (suppliedCourses.trim()
+        ? suppliedCourses.split(",")
+        : ["Cloud Computing", "Blockchain Security"]
+    )
+        .map(name => name.trim())
+        .filter(Boolean)
+)];
+
+for (const courseName of coursesToVerify) {
+    test(`should add and persist course: ${courseName}`, async ({ page }) => {
+        const assignmentTitle = `Course verification - ${courseName}`;
+
+        await addAssignment(
+            page,
+            assignmentTitle,
+            courseName,
+            "2099-12-31"
+        );
+
+        const card = page.locator(".assignment-card").filter({
+            has: page.getByRole("heading", {
+                name: assignmentTitle,
+                exact: true
+            })
+        });
+
+        await expect(card).toBeVisible();
+        await expect(card).toContainText(courseName);
+
+        const stored = await page.evaluate(() =>
+            JSON.parse(localStorage.getItem("studyTrackAssignments") || "[]")
+        );
+
+        expect(stored.some(item =>
+            item.title === assignmentTitle && item.course === courseName
+        )).toBeTruthy();
+
+        await page.reload();
+
+        const persistedCard = page.locator(".assignment-card").filter({
+            has: page.getByRole("heading", {
+                name: assignmentTitle,
+                exact: true
+            })
+        });
+
+        await expect(persistedCard).toBeVisible();
+        await expect(persistedCard).toContainText(courseName);
+    });
+}
+
+test("should prevent adding an assignment when a required field is empty", async ({ page }) => {
+    await page.locator("#title").fill("Incomplete Assignment");
+    // Leave the required course field empty.
+    await page.locator("#dueDate").fill("2026-11-20");
+
+    await page.getByRole("button", { name: "Add Assignment" }).click();
+
+    await expect(page.locator(".assignment-card")).toHaveCount(0);
+    await expect(page.locator("#totalCount")).toHaveText("0");
+});
+
+test("should sort assignments by earliest due date", async ({ page }) => {
+    await addAssignment(
+        page,
+        "Later Assignment",
+        "Cloud Computing",
+        "2026-11-25"
+    );
+
+    await addAssignment(
+        page,
+        "Earlier Assignment",
+        "Blockchain Security",
+        "2026-11-15"
+    );
+
+    await page.locator("#sortSelect").selectOption("due-asc");
+
+    await expect(page.locator(".assignment-card h3")).toHaveText([
+        "Earlier Assignment",
+        "Later Assignment"
+    ]);
+});
