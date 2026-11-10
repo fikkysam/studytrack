@@ -1,10 +1,10 @@
-
 name: StudyTrack CI
 
 on:
   push:
     branches:
       - main
+      - course-report
   pull_request:
     branches:
       - main
@@ -32,3 +32,19 @@ jobs:
 
       - name: Run HTML validation, ESLint and Playwright
         run: npm run check
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studytrack-playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload Playwright test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studytrack-test-results
+          path: test-results/
+          retention-days: 14
