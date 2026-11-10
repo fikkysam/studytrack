@@ -152,3 +152,65 @@ test("should preserve assignments after refreshing", async ({ page }) => {
         page.locator(".assignment-card")
     ).toContainText("Persistent Assignment");
 });
+
+
+/*
+ * Dynamic course verification.
+ * The course names below are test data for this run. Replace/add entries
+ * freely; the test does not rely on a fixed list of real course names.
+ */
+test("should add and persist each course in the dynamic test data", async ({ page }) => {
+    const coursesToVerify = [
+        "Cloud Computing",
+        "Blockchain Security",
+        "AWS",
+        "Solidity Programming",
+        "Microsoft Entra ID"
+    ];
+
+    for (const [index, courseName] of coursesToVerify.entries()) {
+        const assignmentTitle = `Course verification ${index + 1}`;
+
+        await addAssignment(
+            page,
+            assignmentTitle,
+            courseName,
+            "2099-12-31"
+        );
+
+        const card = page.locator(".assignment-card").filter({
+            has: page.getByRole("heading", {
+                name: assignmentTitle,
+                exact: true
+            })
+        });
+
+        // Confirm the new assignment and its course are shown in the UI.
+        await expect(card).toBeVisible();
+        await expect(card).toContainText(courseName);
+
+        // Confirm the assignment (including its course name) was saved.
+        const stored = await page.evaluate(() =>
+            JSON.parse(localStorage.getItem("studyTrackAssignments") || "[]")
+        );
+
+        expect(stored.some(item =>
+            item.title === assignmentTitle && item.course === courseName
+        )).toBeTruthy();
+
+        // Confirm the saved course remains visible after a browser refresh.
+        await page.reload();
+
+        const persistedCard = page.locator(".assignment-card").filter({
+            has: page.getByRole("heading", {
+                name: assignmentTitle,
+                exact: true
+            })
+        });
+
+        await expect(persistedCard).toBeVisible();
+        await expect(persistedCard).toContainText(courseName);
+
+        console.log(`COURSE_REPORT: PASS | ${courseName}`);
+    }
+});
