@@ -1,28 +1,20 @@
-name: StudyTrack CI
+name: StudyTrack Tests
 
 on:
-  workflow_dispatch:
-    inputs:
-      courses:
-        description: "Comma-separated course names to test"
-        required: false
-        type: string
-        default: "Cloud Computing,Blockchain Security"
   push:
     branches:
       - main
-      - course-report
   pull_request:
     branches:
       - main
 
 jobs:
-  quality-checks:
-    name: StudyTrack Quality Checks
+  playwright-tests:
+    name: Run StudyTrack Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Get project code
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -31,29 +23,19 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies
+      - name: Install project dependencies
         run: npm ci
 
-      - name: Install Chromium
+      - name: Install browser for testing
         run: npx playwright install --with-deps chromium
 
-      - name: Run HTML validation, ESLint and Playwright
-        env:
-          STUDYTRACK_COURSES: ${{ inputs.courses }}
-        run: npm run check
+      - name: Run automated tests
+        run: npm test
 
-      - name: Upload Playwright HTML report
+      - name: Save test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: studytrack-playwright-report
+          name: studytrack-test-report
           path: playwright-report/
-          retention-days: 14
-
-      - name: Upload Playwright test results (if generated)
-        if: always() && hashFiles('test-results/**') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: studytrack-test-results
-          path: test-results/
           retention-days: 14
