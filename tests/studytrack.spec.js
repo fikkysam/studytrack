@@ -214,3 +214,37 @@ for (const courseName of coursesToVerify) {
         await expect(persistedCard).toContainText(courseName);
     });
 }
+
+test("should prevent adding an assignment when a required field is empty", async ({ page }) => {
+    await page.locator("#title").fill("Incomplete Assignment");
+    // Leave the required course field empty.
+    await page.locator("#dueDate").fill("2026-11-20");
+
+    await page.getByRole("button", { name: "Add Assignment" }).click();
+
+    await expect(page.locator(".assignment-card")).toHaveCount(0);
+    await expect(page.locator("#totalCount")).toHaveText("0");
+});
+
+test("should sort assignments by earliest due date", async ({ page }) => {
+    await addAssignment(
+        page,
+        "Later Assignment",
+        "Cloud Computing",
+        "2026-11-25"
+    );
+
+    await addAssignment(
+        page,
+        "Earlier Assignment",
+        "Blockchain Security",
+        "2026-11-15"
+    );
+
+    await page.locator("#sortSelect").selectOption("due-asc");
+
+    await expect(page.locator(".assignment-card h3")).toHaveText([
+        "Earlier Assignment",
+        "Later Assignment"
+    ]);
+});
