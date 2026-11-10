@@ -1,6 +1,13 @@
 name: StudyTrack CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      courses:
+        description: "Comma-separated course names to test"
+        required: false
+        type: string
+        default: "Cloud Computing,Blockchain Security"
   push:
     branches:
       - main
@@ -31,6 +38,8 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run HTML validation, ESLint and Playwright
+        env:
+          STUDYTRACK_COURSES: ${{ inputs.courses }}
         run: npm run check
 
       - name: Upload Playwright HTML report
