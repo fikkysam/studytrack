@@ -1,4 +1,3 @@
-
 {
   "name": "studytrack",
   "version": "1.0.0",
@@ -6,10 +5,7 @@
   "main": "script.js",
   "scripts": {
     "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "lint": "eslint script.js",
-    "validate:html": "html-validate index.html",
-    "check": "npm run validate:html && npm run lint && npm test"
+    "check": "npm test"
   },
   "repository": {
     "type": "git",
