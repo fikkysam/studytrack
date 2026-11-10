@@ -4,72 +4,59 @@ StudyTrack is a browser-based application that helps students organize assignmen
 
 ## Features
 
-### Assignment Management
 - Add assignments with a title, course, due date, and priority.
 - Mark assignments as completed or pending.
 - Delete assignments.
-- Save assignment data using browser localStorage.
-
-### Dashboard and Organization
-- View Total, Pending, Upcoming, Completed, and Overdue assignment summaries.
+- View total, pending, upcoming, completed, and overdue assignment counts.
 - Search assignments by title or course.
 - Filter assignments by status.
 - Sort assignments by due date or priority.
-- Clear active search and filter settings.
+- Save assignment data in the browser using localStorage.
 
 ## Technologies
-- HTML5
-- CSS3
-- JavaScript
-- Browser localStorage
-- Node.js and npm
-- Playwright Test
-- ESLint
-- html-validate
-- Git and GitHub
-- GitHub Actions
+
+- HTML5 and CSS3 — page structure and design.
+- JavaScript — application functionality.
+- localStorage — saves assignments in the browser.
+- Node.js and npm — run the testing tools.
+- Playwright — automatically tests the application in a browser.
+- Git and GitHub — version control and project hosting.
+- GitHub Actions — automatically runs the tests when code is pushed to main or a pull request targets main.
 
 ## Running the Application
 
 1. Install Node.js.
 2. Clone this repository.
-3. Open the project folder in your terminal.
-4. Install dependencies:
-
-   `npm install`
-
+3. Open the project folder.
+4. Run `npm install`.
 5. Open `index.html` using VS Code Live Server.
 
-## Automated Testing
+## Running the Automated Tests
 
-Run all quality checks with:
+Run:
 
-`npm run check`
+`npm test`
 
-This command performs:
+Playwright opens the application in Chromium and checks that important features work.
 
-1. **HTML validation:** Checks the HTML structure using html-validate.
-2. **JavaScript linting:** Checks JavaScript code using ESLint.
-3. **Browser automation:** Runs Playwright tests using Chromium.
-
-### Playwright Test Coverage
-
-The current automated test suite covers seven scenarios:
-
+The tests cover:
 - Adding an assignment.
 - Updating dashboard summary counts.
-- Searching assignments by title.
+- Searching assignments.
 - Filtering overdue assignments.
-- Marking assignments as completed.
-- Deleting assignments.
-- Preserving assignments after a page refresh.
+- Marking an assignment as completed.
+- Deleting an assignment.
+- Keeping assignments after a page refresh.
+- Preventing submission when a required field is empty.
+- Sorting assignments by due date.
+- Adding and saving course-labelled assignments.
 
-### Continuous Integration
+## How GitHub Actions Works
 
-GitHub Actions automatically runs the quality checks when changes are pushed to the `main` branch or when a pull request targets `main`.
+GitHub Actions automatically runs the Playwright tests when code is pushed to the `main` branch or when a pull request is opened against `main`.
+
+If a test fails, the workflow reports a failure. If the tests pass, the workflow reports success. A test report is saved as a workflow artifact.
 
 ## Data Storage and Limitations
 
-Assignment records are stored in the browser's localStorage on the current device and browser.
-
-The current application does not provide user accounts, a server-side database, or automatic synchronization between devices or browsers. Clearing browser storage may remove saved assignments.
+Assignments are stored in the browser's localStorage on the current device and browser. The application does not currently have user accounts, a server-side database, or automatic synchronization between devices or browsers.
